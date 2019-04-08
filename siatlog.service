@@ -1,0 +1,13 @@
+[Unit]
+Description=SIAT Log
+
+[Service]
+Type=oneshot
+ExecStart=/opt/siatlog/kirim.sh start
+ExecStop=/opt/siatlog/kirim.sh stop
+ExecReload=/opt/siatlog/kirim.sh restart
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+
