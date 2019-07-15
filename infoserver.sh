@@ -25,7 +25,7 @@ uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
 
 # -------------------- CEK SERVICES -------------------- #
 echo -n "\"services\": { "
-SERVICE=nginx
+SERVICE=httpd
 if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
 SERVICE=sshd
 if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\""; else echo -n "\"$SERVICE\" : \"not running\""; fi
