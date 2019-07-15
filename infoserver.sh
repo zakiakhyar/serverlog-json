@@ -16,15 +16,14 @@ uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
 # SERVICES #
 echo -n "\"services\": { "
 SERVICE=httpd
-if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
+	if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
 # Tambah service baru pisah dengan : echo -n "," 
 	# SERVICE=httpd
 	# if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
 	# echo -n ","
-
 SERVICE=sshd
-if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\""; else echo -n "\"$SERVICE\" : \"not running\""; fi
-echo -n " }, "
+	if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\""; else echo -n "\"$SERVICE\" : \"not running\""; fi
+	echo -n " }, "
 # / SERVICE #
 
 echo -n "\"disk\" : { ";
@@ -39,7 +38,6 @@ echo -n "\", "
 echo -n "\"total_ram\" : \""
 free -m | grep -v shared | awk '/Mem/ {printf $2 }'
 echo '",'
-
 echo -n "\"json_close\" : \"close\""
 echo " }} "
 
