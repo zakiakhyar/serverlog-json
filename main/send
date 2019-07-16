@@ -17,7 +17,7 @@ while true
 do
 	bash /opt/SIAT-MonitoringClient/getinfo | tr '\n' ' ' > /tmp/infoserver.json;
 	#curl -XPOST 'api.serverlog-json.com/api/insert/' --header 'Content-Type: application/x-www-form-urlencoded' -d "key=123&jsondata=@/tmp/infoserver.json";	
-	curl -s -o -XPOST 'api.serverlog-json.com/api/insert/' --header 'Content-Type: application/x-www-form-urlencoded' -d "key=123&jsondata=`cat /tmp/infoserver.json`"
+	curl -s -XPOST 'api.serverlog-json.com/api/insert/' --header 'Content-Type: application/x-www-form-urlencoded' -d "key=123&jsondata=`cat /tmp/infoserver.json`" > /dev/null
 	sleep 30;
 done &
 }
