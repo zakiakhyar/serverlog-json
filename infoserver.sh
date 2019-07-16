@@ -6,8 +6,6 @@
 #
 #
 #
-
-echo -n "{"
 echo -n "{"
 echo -n "\"timestamp\" : "
 echo -n "\"`date -u '+%FT%T.000Z'`\", "
