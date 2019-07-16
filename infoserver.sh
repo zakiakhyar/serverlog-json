@@ -1,6 +1,13 @@
 #!/bin/bash
-echo -n "{"
+# --- SIAT Monitoring-Bot Acehprov
+# Script monitoring server ini dibuat untuk mempermudah Sys-Admin, 
+#
+#
+#
+#
+#
 
+echo -n "{"
 echo -n "{"
 echo -n "\"timestamp\" : "
 echo -n "\"`date -u '+%FT%T.000Z'`\", "
