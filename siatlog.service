@@ -3,9 +3,9 @@ Description=SIAT Log
 
 [Service]
 Type=oneshot
-ExecStart=/opt/siatlog/kirim.sh start
-ExecStop=/opt/siatlog/kirim.sh stop
-ExecReload=/opt/siatlog/kirim.sh restart
+ExecStart=/opt/SIAT-MonitoringClient/send start
+ExecStop=/opt/SIAT-MonitoringClient/send stop
+ExecReload=/opt/SIAT-MonitoringClient/send restart
 RemainAfterExit=yes
 
 [Install]
