@@ -3,7 +3,9 @@
 #  SIAT Monitoring-Bot Acehprov
 #  Script monitoring server ini dibuat untuk mempermudah kerja Sys-Admin Acehprov 
 #  
-#  Cara penginstallan : Jalankan Install.sh (./install.sh) dengan Hak Akses Root
+#  Cara penginstallan : 
+#						Berikan akses eksekusi ke File Install.sh	(chmod 754 Install.sh)
+#						Jalankan Install.sh (./install.sh)
 #
 #  Author : Zaki Akhyar (zaki.akhyar@hotmail.com)
 # 			TIM-SIAT @ 2019 | Dinas Komunikasi Informasi dan Sandi Pemerintah Aceh
