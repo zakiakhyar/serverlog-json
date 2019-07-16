@@ -17,13 +17,9 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+chmod 754 -R main
 mkdir /opt/SIAT-MonitoringClient
-cp send getinfo /opt/SIAT-MonitoringClient/
-cp siatlog.service /etc/systemd/system/
+cd main; cp send getinfo /opt/SIAT-MonitoringClient/; cp siatlog.service /etc/systemd/system/
+systemctl daemon-reload; systemctl enable siatlog.service; systemctl start siatlog.service
 
-systemctl daemon-reload
-systemctl enable siatlog.service
-systemctl start siatlog.service
-
-printf "Selamat instalasi selesai\n"
-printf "Jalankan siatlog dengan : \n\t systemctl (start|status|stop|restart) siatlog \n"
+printf "Selamat instalasi selesai !\n Jalankan siatlog dengan : \n\t systemctl (start|status|stop|restart) siatlog \n"
