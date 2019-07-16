@@ -1,11 +1,15 @@
 #!/bin/bash
-# --- SIAT Monitoring-Bot Acehprov
-# Script monitoring server ini dibuat untuk mempermudah Sys-Admin, 
 #
+#  SIAT Monitoring-Bot Acehprov
+#  Script monitoring server ini dibuat untuk mempermudah kerja Sys-Admin Acehprov 
+#  
+#  Cara penginstallan : Jalankan Install.sh (./install.sh) dengan Hak Akses Root
 #
+#  Author : Zaki Akhyar (zaki.akhyar@hotmail.com)
+# 			TIM-SIAT @ 2019 | Dinas Komunikasi Informasi dan Sandi Pemerintah Aceh
+#  License : MIT (https://opensource.org/licenses/MIT)
 #
-#
-#
+
 echo -n "{"
 echo -n "\"timestamp\" : "
 echo -n "\"`date -u '+%FT%T.000Z'`\", "
