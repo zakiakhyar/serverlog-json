@@ -13,16 +13,11 @@
 #
 
 echo -n "{"
-echo -n "\"timestamp\" : "
-echo -n "\"`date -u '+%FT%T.000Z'`\", "
-echo -n "\"hostname\" : "
-echo -n "\"`hostname`\", "
-echo -n "\"ip\" : "
-echo -n "\"`hostname -I`\","
-echo -n "\"users_sedang_login\":\""
-uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 "\","}'
-echo -n "\"uptime\" : \""
-uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
+echo -n "\"timestamp\" : "; echo -n "\"`date -u '+%FT%T.000Z'`\", "
+echo -n "\"hostname\" : "; echo -n "\"`hostname`\", "
+echo -n "\"ip\" : "; echo -n "\"`hostname -I`\","
+echo -n "\"users_sedang_login\":\""; uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 "\","}'
+echo -n "\"uptime\" : \""; uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
 #echo -n "\", "
 
 # SERVICES #
