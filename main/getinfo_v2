@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+#  SIAT Monitoring-Bot Acehprov
+#  Script monitoring server ini dibuat untuk mempermudah kerja Sys-Admin Acehprov 
+#  
+#  Cara penginstallan : 
+#						Berikan akses eksekusi ke File Install.sh	(chmod 754 Install.sh)
+#						Jalankan Install.sh (./install.sh)
+#
+#  Author : Zaki Akhyar (zaki.akhyar@hotmail.com)
+# 			TIM-SIAT @ 2019 | Dinas Komunikasi Informasi dan Sandi Pemerintah Aceh
+#  License : MIT (https://opensource.org/licenses/MIT)
+#
+
+echo -n "{"
+echo -n "\"timestamp\" : "
+echo -n "\"`date -u '+%FT%T.000Z'`\", "
+echo -n "\"hostname\" : "
+echo -n "\"`hostname`\", "
+echo -n "\"ip\" : "
+echo -n "\"`hostname -I`\","
+echo -n "\"users_sedang_login\":\""
+uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 "\","}'
+echo -n "\"uptime\" : \""
+uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
+#echo -n "\", "
+
+# SERVICES #
+Cek service terinstall jika dua kondisi terpenuhi maka kirim kan alert. 
+Kondisi 1 : terinstall pada server --> Buat daftar package yang terinstall, cron every 23.59 
+Kondisi 2 : Service yang terinstall tidak running.  --> 
+SERVICES=("nginx httpd ")
+
+	# echo -n "\"services\": { "
+	# SERVICE=nginx;	if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
+	# # Tambah service baru pisah dengan : echo -n "," 
+	# 	# SERVICE=httpd; if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
+	# 	# echo -n ","
+	# SERVICE=sshd;	if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\""; else echo -n "\"$SERVICE\" : \"not running\""; fi
+	# 	echo -n " }, "
+# / SERVICE #
+
+echo -n "\"disk\" : { ";
+echo -n "\""
+df -h --total | awk  ' /total/ { print "total\" : \""$2"\", \"used\" : \""$3"\", \"free\" : \""$4"\", \"percentage\" : \""$5"\'\"' " }'
+echo "},"
+
+echo -n "\"memory\" : { ";
+echo -n "\"free_ram\" : \""
+free -m | grep -v shared | awk '/Mem/ {printf $4 }'
+echo -n "\", "
+echo -n "\"total_ram\" : \""
+free -m | grep -v shared | awk '/Mem/ {printf $2 }'
+echo '",'
+echo -n "\"json_close\" : \"close\""
+echo " }} "
+
