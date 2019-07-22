@@ -27,8 +27,11 @@ uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
 
 # SERVICES #
 Cek service terinstall jika dua kondisi terpenuhi maka kirim kan alert. 
+		rpm -qa | grep (List service) ||= maka buatkan daftar list yang terinstall 
 Kondisi 1 : terinstall pada server --> Buat daftar package yang terinstall, cron every 23.59 
-Kondisi 2 : Service yang terinstall tidak running.  --> 
+Kondisi 2 : Service yang terinstall tidak running.  --> di cek oleh API lalu send ke Sys-Admin .
+	
+
 SERVICES=("nginx httpd ")
 
 	# echo -n "\"services\": { "
