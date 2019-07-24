@@ -13,55 +13,39 @@
 #
 
 echo -n "{"
-echo -n "\"timestamp\" : "
-echo -n "\"`date -u '+%FT%T.000Z'`\", "
-echo -n "\"hostname\" : "
-echo -n "\"`hostname`\", "
-echo -n "\"ip\" : "
-echo -n "\"`hostname -I`\","
-echo -n "\"users_sedang_login\":\""
-uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 "\","}'
-echo -n "\"uptime\" : \""
-uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
+echo -n "\"timestamp\" : "; echo -n "\"`date -u '+%FT%T.000Z'`\", "
+echo -n "\"hostname\" : "; echo -n "\"`hostname`\", "
+echo -n "\"ip\" : "; echo -n "\"`hostname -I`\","
+echo -n "\"users_sedang_login\":\""; uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 "\","}'
+echo -n "\"uptime\" : \""; uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\", " }'
 #echo -n "\", "
 
 # SERVICES #
-Cek service terinstall jika dua kondisi terpenuhi maka kirim kan alert. 
-		rpm -qa | grep (List service) ||= maka buatkan daftar list yang terinstall 
-Kondisi 1 : terinstall pada server --> Buat daftar package yang terinstall, cron every 23.59 
-Kondisi 2 : Service yang terinstall tidak running.  --> di cek oleh API lalu send ke Sys-Admin .
+	# Cek service terinstall jika dua kondisi terpenuhi maka kirim kan alert. 
+	# 		rpm -qa | grep (List service) ||= maka buatkan daftar list yang terinstall 
+	# Kondisi 1 : terinstall pada server --> Buat daftar package yang terinstall, cron every 23.59 
+	# Kondisi 2 : Service yang terinstall tidak running.  --> di cek oleh API lalu send ke Sys-Admin .
 	
-echo -n "\"services\": { "
-SERVICES=("nginx" "httpd" "mysqld" "sshd" "chronyd" "snmpd")
-tLen=${#SERVICES[@]}
-
-for ((i=0; i<${tLen}; i++));
-        do
-        #echo ${SERVICES[$i]}
-                if ps ax | grep -v grep | grep ${SERVICES[$i]} > /dev/null; then echo -n "\"${SERVICES[$i]}\" : \"running\","; else echo -n "\"${SERVICES[$i]}\" : \"not running\","; fi
-        done
-        echo -n " }, "
-
-	# echo -n "\"services\": { "
-	# SERVICE=nginx;	if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
-	# # Tambah service baru pisah dengan : echo -n "," 
-	# 	# SERVICE=httpd; if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\","; else echo -n "\"$SERVICE\" : \"not running\","; fi
-	# 	# echo -n ","
-	# SERVICE=sshd;	if ps ax | grep -v grep | grep $SERVICE > /dev/null; then echo -n "\"$SERVICE\" : \"running\""; else echo -n "\"$SERVICE\" : \"not running\""; fi
-	# 	echo -n " }, "
-# / SERVICE #
+tmp_services=$(echo -n "\"services\": { ")
+SERVICES=(nginx httpd mysqld sshd chronyd snmpd) 
+tLen=${#SERVICES[*]}
+	for ((i=0; i<${tLen}; i++));
+	        do
+	                if ps ax | grep -v grep | grep ${SERVICES[$i]} > /dev/null; then tmp_services=$tmp_services$(echo -n "\"${SERVICES[$i]}\" : \"running\","); else tmp_services=$tmp_services$(echo -n "\"${SERVICES[$i]}\" : \"not running\","); fi
+	        done
+tmp_services="${tmp_services::-1}"
+tmp_services="$tmp_services },"
+echo $tmp_services;
 
 echo -n "\"disk\" : { ";
 echo -n "\""
 df -h --total | awk  ' /total/ { print "total\" : \""$2"\", \"used\" : \""$3"\", \"free\" : \""$4"\", \"percentage\" : \""$5"\'\"' " }'
 echo "},"
 
-echo -n "\"memory\" : { ";
-echo -n "\"free_ram\" : \""
-free -m | grep -v shared | awk '/Mem/ {printf $4 }'
+echo -n "\"memory\" : { "; 
+echo -n "\"free_ram\" : \""; free -m | grep -v shared | awk '/Mem/ {printf $4 }'
 echo -n "\", "
-echo -n "\"total_ram\" : \""
-free -m | grep -v shared | awk '/Mem/ {printf $2 }'
+echo -n "\"total_ram\" : \""; free -m | grep -v shared | awk '/Mem/ {printf $2 }'
 echo '",'
 echo -n "\"json_close\" : \"close\""
 echo " }} "
