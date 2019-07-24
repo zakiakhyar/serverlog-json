@@ -1,0 +1,6 @@
+Concate string Bash script :
+
+		foo="Hello"
+		foo="$foo World"
+		echo $foo
+		> Hello World
