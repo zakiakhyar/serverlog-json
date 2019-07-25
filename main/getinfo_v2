@@ -11,46 +11,40 @@
 # 			TIM-SIAT @ 2019 | Dinas Komunikasi Informasi dan Sandi Pemerintah Aceh
 #  License : MIT (https://opensource.org/licenses/MIT)
 #
-
-echo -n "{"
-echo -n "\"general\":{ "
-echo -n "\"timestamp\" : "; echo -n "\"`date -u '+%FT%T.000Z'`\", "
-echo -n "\"hostname\" : "; echo -n "\"`hostname`\", "
-echo -n "\"ip\" : "; echo -n "\"`hostname -I`\","
-echo -n "\"users_sedang_login\":\""; uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 "\","}'
-echo -n "\"uptime\" : \""; uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 "\"}, " }'
-#echo -n "\", "
-
-# SERVICES #
-        # Cek service terinstall jika dua kondisi terpenuhi maka kirim kan alert. 
-        #               rpm -qa | grep (List service) ||= maka buatkan daftar list yang terinstall 
-        # Kondisi 1 : terinstall pada server --> Buat daftar package yang terinstall, cron every 23.59 
-        # Kondisi 2 : Service yang terinstall tidak running.  --> di cek oleh API lalu send ke Sys-Admin .
-
-tmp_services=$(echo -n "\"services\": { ")
 SERVICES=(nginx httpd mysqld sshd chronyd snmpd)
-tLen=${#SERVICES[*]}
-        for ((i=0; i<${tLen}; i++));
-                do
-                        if ps ax | grep -v grep | grep ${SERVICES[$i]} > /dev/null; then tmp_services=$tmp_services$(echo -n "\"${SERVICES[$i]}\" : \"running\","); else tmp_services=$tmp_services$(echo -n "\"${SERVICES[$i]}\" : \"not running\","); fi
-                done
-tmp_services="${tmp_services::-1}"
-tmp_services="$tmp_services },"
-echo $tmp_services;
+timestamp=$(date -u '+%FT%T.000Z')
+namahost=$(hostname)
+ip=$(hostname -I)
+userlogin=$(uptime | grep -ohe '[0-9.*] user[s,]' | awk '{ print $1 }')
+echo -n "{"
+        waktuhidup=$(uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{print $2 " " $3}')
+        printf '"general" :{ "timestamp" : "%s","hostname" : "%s", "ip" : "%s", "users_sedang_login" : "%s", "uptime" : "%s" }, ' $timestamp $namahost $ip $userlogin "$waktuhidup"
+# SERVICES #
+        # Cek service terinstall jika dua kondisi terpenuhi maka kirim kan alert.
+        #               rpm -qa | grep (List service) ||= maka buatkan daftar list yang terinstall
+        # Kondisi 1 : terinstall pada server --> Buat daftar package yang terinstall, cron every 23.59
+        # Kondisi 2 : Service yang terinstall tidak running.  --> di cek oleh API lalu send ke Sys-Admin .
+tmp_services=$(echo -n "\"services\": { ")
+        	tLen=${#SERVICES[*]}
+                for ((i=0; i<${tLen}; i++));
+                        do
+                                if ps ax | grep -v grep | grep ${SERVICES[$i]} > /dev/null; then tmp_services=$tmp_services$(echo -n "\"${SERVICES[$i]}\" : \"running\","); else tmp_services=$tmp_services$(echo -n "\"${SERVICES
+[$i]}\" : \"not running\","); fi
+                        done
+	        tmp_services="${tmp_services::-1}"
+	        tmp_services="$tmp_services },"
+        echo -n $tmp_services;
 
 echo -n "\"disk\" : { ";
-echo -n "\""
-df -h --total | awk  ' /total/ { print "total\" : \""$2"\", \"used\" : \""$3"\", \"free\" : \""$4"\", \"percentage\" : \""$5"\'\"' " }'
-echo -n "},"
+        echo -n "\""
+        tmp_disk=$(df -h --total | awk  ' /total/ { print "total\" : \""$2"\", \"used\" : \""$3"\", \"free\" : \""$4"\", \"percentage\" : \""$5"\'\"' " }')
+        echo -n "$tmp_disk},"
 
 echo -n "\"memory\" : { ";
-echo -n "\"free_ram\" : \""
-free -m | grep -v shared | awk '/Mem/ {printf $4 }'
-echo -n "\", "
-echo -n "\"total_ram\" : \""
-free -m | grep -v shared | awk '/Mem/ {printf $2 }'
-echo '",'
-echo -n "\"json_close\" : \"close\""
+        echo -n "\"free_ram\" : \""
+                tmp_ram=$(free -m | grep -v shared | awk '/Mem/ {printf $4 }')
+        echo -n "$tmp_ram\","
+        echo -n "\"total_ram\" : \""
+                tmp_ram=$(free -m | grep -v shared | awk '/Mem/ {printf $2 }')
+        echo -n "$tmp_ram\""
 echo " }} "
-
-
