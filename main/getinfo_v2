@@ -41,8 +41,8 @@ echo -n "\"disk\" : { ";
         echo -n "$tmp_disk},"
 
 echo -n "\"memory\" : { ";
-        echo -n "\"free_ram\" : \""
-                tmp_ram=$(free -m | grep -v shared | awk '/Mem/ {printf $4 }')
+        echo -n "\"available_ram\" : \""
+                tmp_ram=$(free -h | grep -v shared | awk '/Mem/ {printf $7 }')
         echo -n "$tmp_ram\","
         echo -n "\"total_ram\" : \""
                 tmp_ram=$(free -m | grep -v shared | awk '/Mem/ {printf $2 }')
