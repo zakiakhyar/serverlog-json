@@ -45,6 +45,6 @@ echo -n "\"memory\" : { ";
                 tmp_ram=$(free -h | grep -v shared | awk '/Mem/ {printf $7 }')
         echo -n "$tmp_ram\","
         echo -n "\"total_ram\" : \""
-                tmp_ram=$(free -m | grep -v shared | awk '/Mem/ {printf $2 }')
+                tmp_ram=$(free -h | grep -v shared | awk '/Mem/ {printf $2 }')
         echo -n "$tmp_ram\""
 echo " }} "
